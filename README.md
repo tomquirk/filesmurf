@@ -19,7 +19,7 @@ Filesmurf defines 2 function types: `MatchFunc` and `ActionFunc`.
 ```
 type MatchFunc func(string) bool
 ```
-A MatchFunc takes a file path as a `string` and returns a `bool` if the conditions outlined in the function are met
+A MatchFunc takes a file path as a `string` and returns a `bool` indicating if the conditions outlined in the function were met
 
 #### ActionFunc
 ```
@@ -27,7 +27,7 @@ type ActionFunc func(string)
 ```
 An ActionFunc takes a file path as a `string` and should modify the file in some way.
 
-See my project [photosmurf](https://www.github.com/tomquirk/photosmurf) for a real example.
+See my project [photosmurf](https://www.github.com/tomquirk/photo-smurf-go) for a real example.
 
 ## Contributions
 Please do, I'm a Go noob :joy:
