@@ -4,15 +4,17 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"time"
 )
 
-// GetDstPath returns the appropriate destination directory of a given source filepath
-type GetDstPath func(string) string
+// MatchFunc function defines the set of rules that determine which files will be actioned
+type MatchFunc func(string) bool
+
+// ActionFunc function defines the action to be applied to a matched file
+type ActionFunc func(string)
 
 // Run runs the things
-func Run(rootPath string, getDstPath GetDstPath) {
+func Run(rootPath string, match MatchFunc, action ActionFunc) {
 	startTime := time.Now()
 	var c int
 
@@ -20,13 +22,10 @@ func Run(rootPath string, getDstPath GetDstPath) {
 		if fileInfo.IsDir() {
 			return nil
 		}
-		dstPath := getDstPath(path)
 
-		if dstPath != "" {
+		if match(path) {
 			c++
-			pathTree := strings.Split(dstPath, "/")
-			os.MkdirAll(strings.Join(pathTree[:len(pathTree)-1], "/"), os.ModePerm)
-			os.Rename(path, getDstPath(path))
+			action(path)
 		}
 
 		return nil
@@ -37,5 +36,5 @@ func Run(rootPath string, getDstPath GetDstPath) {
 	}
 
 	elapsed := time.Since(startTime)
-	log.Printf("moved %d files in %s", c, elapsed)
+	log.Printf("modified %d files in %s", c, elapsed)
 }
