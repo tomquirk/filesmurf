@@ -1,6 +1,7 @@
 package filesmurf
 
 import (
+	"errors"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,10 +12,10 @@ import (
 type MatchFunc func(string) bool
 
 // ActionFunc function defines the action to be applied to a matched file
-type ActionFunc func(string)
+type ActionFunc func(string) error
 
 // Run runs the things
-func Run(rootPath string, match MatchFunc, action ActionFunc) {
+func Run(rootPath string, match MatchFunc, action ActionFunc) error {
 	startTime := time.Now()
 	var c int
 
@@ -32,9 +33,11 @@ func Run(rootPath string, match MatchFunc, action ActionFunc) {
 	})
 
 	if err != nil {
-		log.Fatalf("walk error [%v]\n", err)
+		return errors.New("error: filepath.walk failed")
 	}
 
 	elapsed := time.Since(startTime)
 	log.Printf("modified %d files in %s", c, elapsed)
+
+	return nil
 }
